@@ -15,10 +15,15 @@ public class Alpha {
         Scanner scanner = new Scanner(System.in);
         while (chatbot.isOpen()) {
             String input = scanner.nextLine();
-            if (Objects.equals(input, "bye")) {
-                chatbot.close();
-            } else {
-                System.out.println(input);
+            switch(input) {
+                case "bye":
+                    chatbot.close();
+                    break;
+                case "list":
+                    System.out.println(chatbot.getList());
+                    break;
+                default:
+                    System.out.println(chatbot.getList().addAction(input));
             }
         }
         scanner.close();

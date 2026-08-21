@@ -5,6 +5,7 @@ public class Chatbot {
     private static String greeting = String.format("Hello! I am %s. What can I do for you?", Chatbot.name);
     private static String exit = String.format("Bye. Hope to see you again!");
     private static boolean open = false;
+    private static TaskList list = new TaskList();
 
     private Chatbot() {
     }
@@ -27,6 +28,10 @@ public class Chatbot {
 
     public boolean isOpen() {
         return Chatbot.open;
+    }
+
+    public TaskList getList() {
+        return Chatbot.list;
     }
 
     public void close() {
