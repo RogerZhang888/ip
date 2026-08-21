@@ -16,97 +16,118 @@ public class Alpha {
         while (chatbot.isOpen()) {
             String input = scanner.nextLine();
             String command = input.trim();
-            if (command.startsWith("mark ")) {
-                System.out.println(updateTaskStatus(chatbot.getList(), command, true));
-                continue;
-            }
-            if (command.startsWith("unmark ")) {
-                System.out.println(updateTaskStatus(chatbot.getList(), command, false));
-                continue;
-            }
+            try {
+                if (command.equals("mark") || command.startsWith("mark ")) {
+                    System.out.println(updateTaskStatus(chatbot.getList(), command, true));
+                    continue;
+                }
+                if (command.equals("unmark") || command.startsWith("unmark ")) {
+                    System.out.println(updateTaskStatus(chatbot.getList(), command, false));
+                    continue;
+                }
 
-            switch (command) {
-                case "bye":
-                    chatbot.close();
-                    break;
-                case "list":
-                    System.out.println(chatbot.getList());
-                    break;
-                default:
-                    System.out.println(addTypedTask(chatbot.getList(), input));
+                switch (command) {
+                    case "bye":
+                        chatbot.close();
+                        break;
+                    case "list":
+                        System.out.println(chatbot.getList());
+                        break;
+                    default:
+                        System.out.println(addTypedTask(chatbot.getList(), command));
+                }
+            } catch (AlphaException exception) {
+                System.out.println("Oops! " + exception.getMessage());
             }
         }
         scanner.close();
     }
 
-    /** Parses a todo, deadline, event, or legacy plain task command. */
-    private static String addTypedTask(TaskList list, String input) {
-        String[] commandParts = input.trim().split("\\s+", 2);
-        if (commandParts.length == 1) {
-            return list.addTask(input);
+    /** Parses a todo, deadline, or event command. */
+    private static String addTypedTask(TaskList list, String input) throws AlphaException {
+        if (input.isEmpty()) {
+            throw new AlphaException("Please enter a command.");
         }
 
+        String[] commandParts = input.split("\\s+", 2);
         String command = commandParts[0];
-        String details = commandParts[1].trim();
+        String details = commandParts.length == 2 ? commandParts[1].trim() : "";
         switch (command) {
             case "todo":
+                if (details.isEmpty()) {
+                    throw new AlphaException("A todo needs a description.");
+                }
                 return list.addTask(new Todo(details));
             case "deadline":
                 return addDeadline(list, details);
             case "event":
                 return addEvent(list, details);
             default:
-                return list.addTask(input);
+                throw new AlphaException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, or bye.");
         }
     }
 
     /** Parses a deadline command using the form: deadline description /by date. */
-    private static String addDeadline(TaskList list, String details) {
-        String marker = " /by ";
-        int markerIndex = details.indexOf(marker);
-        if (markerIndex <= 0 || markerIndex + marker.length() >= details.length()) {
-            return "Please use: deadline <description> /by <date or time>.";
+    private static String addDeadline(TaskList list, String details) throws AlphaException {
+        int markerIndex = details.indexOf("/by");
+        if (markerIndex < 0) {
+            throw new AlphaException("A deadline needs a description followed by /by and a date or time.");
         }
 
         String description = details.substring(0, markerIndex).trim();
-        String by = details.substring(markerIndex + marker.length()).trim();
+        String by = details.substring(markerIndex + 3).trim();
+        if (description.isEmpty()) {
+            throw new AlphaException("A deadline needs a description.");
+        }
+        if (by.isEmpty()) {
+            throw new AlphaException("A deadline needs a date or time after /by.");
+        }
         return list.addTask(new Deadline(description, by));
     }
 
     /** Parses an event command using the form: event description /from start /to end. */
-    private static String addEvent(TaskList list, String details) {
-        String fromMarker = " /from ";
-        String toMarker = " /to ";
-        int fromIndex = details.indexOf(fromMarker);
-        int toIndex = details.indexOf(toMarker, fromIndex + fromMarker.length());
-        if (fromIndex <= 0 || toIndex <= fromIndex + fromMarker.length()
-                || toIndex + toMarker.length() >= details.length()) {
-            return "Please use: event <description> /from <start> /to <end>.";
+    private static String addEvent(TaskList list, String details) throws AlphaException {
+        int fromIndex = details.indexOf("/from");
+        int toIndex = details.indexOf("/to", fromIndex + 5);
+        if (fromIndex < 0) {
+            throw new AlphaException("An event needs a description followed by /from and /to times.");
+        }
+        if (toIndex < 0) {
+            throw new AlphaException("An event needs an end time after /to.");
         }
 
         String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + fromMarker.length(), toIndex).trim();
-        String to = details.substring(toIndex + toMarker.length()).trim();
+        String from = details.substring(fromIndex + 5, toIndex).trim();
+        String to = details.substring(toIndex + 3).trim();
+        if (description.isEmpty()) {
+            throw new AlphaException("An event needs a description.");
+        }
+        if (from.isEmpty()) {
+            throw new AlphaException("An event needs a start time after /from.");
+        }
+        if (to.isEmpty()) {
+            throw new AlphaException("An event needs an end time after /to.");
+        }
         return list.addTask(new Event(description, from, to));
     }
 
     /** Updates a task's status and returns the message shown to the user. */
-    private static String updateTaskStatus(TaskList list, String command, boolean done) {
+    private static String updateTaskStatus(TaskList list, String command, boolean done) throws AlphaException {
         String[] parts = command.split("\\s+");
         if (parts.length != 2) {
-            return "Please specify a valid task number.";
+            throw new AlphaException("Please provide a task number, for example: mark 2.");
         }
 
         int number;
         try {
             number = Integer.parseInt(parts[1]);
         } catch (NumberFormatException exception) {
-            return "Please specify a valid task number.";
+            throw new AlphaException("Task numbers must be whole numbers.");
         }
 
         Task task = list.getTask(number);
         if (task == null) {
-            return "Please specify a valid task number.";
+            throw new AlphaException("That task number does not exist.");
         }
 
         if (done) {
