@@ -21,12 +21,17 @@ public class Chatbot {
         return Chatbot.greeting;
     }
 
-    public String getExit() {
+    public static String getExit() {
         return Chatbot.exit;
+    }
+
+    public boolean isOpen() {
+        return Chatbot.open;
     }
 
     public void close() {
         Chatbot.open = false;
+        System.out.println(Chatbot.getExit());
     }
 
 }

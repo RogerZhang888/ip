@@ -1,3 +1,6 @@
+import java.util.Objects;
+import java.util.Scanner;
+
 public class Alpha {
     public static void main(String[] args) {
         String banner = "    _    _     ____  _   _    _    \n"
@@ -8,6 +11,16 @@ public class Alpha {
         System.out.println(banner);
         Chatbot chatbot = Chatbot.getChatbot();
         System.out.println(chatbot.getGreeting());
-        System.out.println(chatbot.getExit());
+
+        Scanner scanner = new Scanner(System.in);
+        while (chatbot.isOpen()) {
+            String input = scanner.nextLine();
+            if (Objects.equals(input, "bye")) {
+                chatbot.close();
+            } else {
+                System.out.println(input);
+            }
+        }
+        scanner.close();
     }
 }
