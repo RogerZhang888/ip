@@ -8,7 +8,7 @@
 
 ## Adding deadlines
 
-// Describe the action and its outcome.
+// Describe the task and its outcome.
 
 // Give examples of usage
 
