@@ -25,6 +25,10 @@ public class Alpha {
                     System.out.println(updateTaskStatus(chatbot.getList(), command, false));
                     continue;
                 }
+                if (command.equals("delete") || command.startsWith("delete ")) {
+                    System.out.println(deleteTask(chatbot.getList(), command));
+                    continue;
+                }
 
                 switch (command) {
                     case "bye":
@@ -63,7 +67,7 @@ public class Alpha {
             case "event":
                 return addEvent(list, details);
             default:
-                throw new AlphaException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, or bye.");
+                throw new AlphaException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
         }
     }
 
@@ -137,5 +141,28 @@ public class Alpha {
 
         list.markUndone(number);
         return String.format("OK, I've marked this task as not done yet:%n  %s", task);
+    }
+
+    /** Deletes the numbered task and returns the confirmation shown to the user. */
+    private static String deleteTask(TaskList list, String command) throws AlphaException {
+        String[] parts = command.split("\\s+");
+        if (parts.length != 2) {
+            throw new AlphaException("Please provide a task number, for example: delete 2.");
+        }
+
+        int number;
+        try {
+            number = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException exception) {
+            throw new AlphaException("Task numbers must be whole numbers.");
+        }
+
+        Task task = list.deleteTask(number);
+        if (task == null) {
+            throw new AlphaException("That task number does not exist.");
+        }
+
+        return String.format("Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+                task, list.size());
     }
 }
