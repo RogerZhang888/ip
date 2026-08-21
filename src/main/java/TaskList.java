@@ -7,18 +7,23 @@ public class TaskList {
 
     }
 
+    /** Adds a plain task as a todo and returns the confirmation shown to the user. */
     public String addTask(String description) {
-        Task task = new Task(description);
+        return this.addTask(new Todo(description));
+    }
+
+    /** Adds any task subtype, demonstrating polymorphic storage in the task array. */
+    public String addTask(Task task) {
         this.tasks[this.next] = task;
         this.next++;
-        return String.format("added: %s", task.toString());
+        return String.format("Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+                task, this.next);
     }
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.next; i++) {
-            String done = tasks[i].isDone() ? "X" : " ";
-            builder.append(String.format("%d: [%s] %s \n", i+1, done, tasks[i].toString()));
+            builder.append(String.format("%d: %s%n", i + 1, this.tasks[i]));
         }
 
         return builder.toString();

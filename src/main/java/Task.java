@@ -1,8 +1,8 @@
 /** Represents one task in Alpha's task list. */
 public class Task {
     private static int COUNTER = 0;
-    private int id;
-    private String description;
+    private final int id;
+    private final String description;
     private boolean done = false;
 
     public Task(String description) {
@@ -16,7 +16,19 @@ public class Task {
     }
 
     public String toString() {
-        return this.description;
+        String status = this.done ? "X" : " ";
+        return String.format("[%s][%s] %s%s", this.getTypeIcon(), status,
+                this.description, this.getTimeDetails());
+    }
+
+    /** Returns the letter used to identify this task type in the user interface. */
+    protected String getTypeIcon() {
+        return "T";
+    }
+
+    /** Returns the date/time details displayed after the task description. */
+    protected String getTimeDetails() {
+        return "";
     }
 
     public void markDone() {
