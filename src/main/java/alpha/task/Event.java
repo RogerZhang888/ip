@@ -7,6 +7,7 @@ public class Event extends Task {
     private final LocalDateTime from;
     private final LocalDateTime to;
 
+    /** Creates an event by parsing its start and end date/time text. */
     public Event(String description, String from, String to) {
         this(description, DateTimeParser.parse(from), DateTimeParser.parse(to));
     }
