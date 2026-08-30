@@ -43,8 +43,8 @@ public class Alpha {
     public void run() {
         this.ui.showWelcome();
         try {
-            String input;
-            while ((input = this.ui.readCommand()) != null) {
+            String input = this.ui.readCommand();
+            while (input != null) {
                 try {
                     if (!this.execute(this.parser.parse(input))) {
                         break;
@@ -52,6 +52,7 @@ public class Alpha {
                 } catch (AlphaException exception) {
                     this.ui.showError(exception.getMessage());
                 }
+                input = this.ui.readCommand();
             }
         } finally {
             this.ui.close();

@@ -57,7 +57,7 @@ public class Storage {
             if (parent != null) {
                 Files.createDirectories(parent);
             }
-            Files.write(this.filePath, this.serialiseTasks(taskList), StandardCharsets.UTF_8,
+            Files.write(this.filePath, this.serializeTasks(taskList), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException exception) {
             throw new StorageException("Could not save tasks to " + this.filePath + ".", exception);
@@ -65,7 +65,7 @@ public class Storage {
     }
 
     /** Converts each task into one encoded record for the storage file. */
-    private List<String> serialiseTasks(TaskList taskList) {
+    private List<String> serializeTasks(TaskList taskList) {
         ArrayList<String> lines = new ArrayList<>();
         for (Task task : taskList.getTasks()) {
             String type;

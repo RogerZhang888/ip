@@ -83,7 +83,9 @@ public class Parser {
             case "event":
                 return new Command(CommandType.ADD, parseEvent(details), 0);
             default:
-                throw new AlphaException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                throw new AlphaException(
+                        "I don't recognise that command. Try todo, deadline, event, list, "
+                                + "mark, unmark, delete, or bye.");
         }
     }
 
