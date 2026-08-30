@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 /** Tests task-list mutation, one-based indexing, and encapsulation. */
 class TaskListTest {
+    /** Verifies task mutations, one-based indexing, and invalid-number handling. */
     @Test
     void managesTasksUsingOneBasedNumbers() {
         TaskList tasks = new TaskList();
@@ -34,6 +35,7 @@ class TaskListTest {
         assertTrue(tasks.deleteTask(2) == null);
     }
 
+    /** Verifies callers cannot mutate the task list through its read-only view. */
     @Test
     void exposesTasksAsReadOnlyCollection() {
         TaskList tasks = new TaskList();

@@ -7,12 +7,14 @@ public class Task {
     private final String description;
     private boolean done = false;
 
+    /** Creates an unfinished task with the supplied description. */
     public Task(String description) {
         this.id = COUNTER;
         Task.COUNTER ++;
         this.description = description;
     }
 
+    /** Returns the unique identifier assigned to this task. */
     public int getId() {
         return this.id;
     }
@@ -22,6 +24,7 @@ public class Task {
         return this.description;
     }
 
+    /** Returns the task's display text, including its type, status, and details. */
     public String toString() {
         String status = this.done ? "X" : " ";
         return String.format("[%s][%s] %s%s", this.getTypeIcon(), status,
@@ -38,6 +41,7 @@ public class Task {
         return "";
     }
 
+    /** Marks this task as complete. */
     public void markDone() {
         this.done = true;
     }
@@ -47,6 +51,7 @@ public class Task {
         this.done = false;
     }
 
+    /** Returns whether this task is currently complete. */
     public boolean isDone() {
         return this.done;
     }

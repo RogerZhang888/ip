@@ -28,6 +28,7 @@ public class TaskList {
         return task;
     }
 
+    /** Returns a numbered display of all tasks in this list. */
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.tasks.size(); i++) {

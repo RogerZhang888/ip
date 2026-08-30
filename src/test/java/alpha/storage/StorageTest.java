@@ -22,6 +22,7 @@ class StorageTest {
     @TempDir
     Path temporaryDirectory;
 
+    /** Verifies directory creation and round-trip preservation of all task types. */
     @Test
     void createsMissingParentDirectoriesAndLoadsAllTaskTypes() throws StorageException {
         Path file = this.temporaryDirectory.resolve("nested").resolve("tasks.txt");
@@ -50,6 +51,7 @@ class StorageTest {
         assertFalse(event.isDone());
     }
 
+    /** Verifies that a first run with no storage file starts with no tasks. */
     @Test
     void treatsMissingFileAsEmptyTaskCollection() throws StorageException {
         Storage storage = new Storage(this.temporaryDirectory.resolve("missing").resolve("tasks.txt"));

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class Deadline extends Task {
     private final LocalDateTime by;
 
+    /** Creates a deadline by parsing the supplied date or time text. */
     public Deadline(String description, String by) {
         this(description, DateTimeParser.parse(by));
     }

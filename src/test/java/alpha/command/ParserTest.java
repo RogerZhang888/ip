@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 class ParserTest {
     private final Parser parser = new Parser();
 
+    /** Verifies that day-first date/time text becomes a typed deadline. */
     @Test
     void parsesDeadlineWithDayFirstDateAndTime() throws AlphaException {
         Parser.Command command = this.parser.parse("deadline return book /by 2/12/2019 1800");
@@ -25,6 +26,7 @@ class ParserTest {
         assertEquals("[D][ ] return book (by: Dec 02 2019 18:00)", deadline.toString());
     }
 
+    /** Verifies that event boundaries are parsed into typed date/time values. */
     @Test
     void parsesEventWithStartAndEndDateTimes() throws AlphaException {
         Parser.Command command = this.parser.parse(
@@ -35,6 +37,7 @@ class ParserTest {
         assertEquals(LocalDateTime.of(2019, 10, 15, 16, 0), event.getTo());
     }
 
+    /** Verifies that incomplete, invalid, and non-numeric commands are rejected. */
     @Test
     void rejectsMissingTaskDetailsAndInvalidDates() {
         assertThrows(AlphaException.class, () -> this.parser.parse("todo"));
