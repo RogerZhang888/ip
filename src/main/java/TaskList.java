@@ -3,6 +3,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -135,10 +137,11 @@ public class TaskList {
             String record = "";
             if (task instanceof Deadline deadline) {
                 type = "D";
-                record = "|" + encode(deadline.getBy());
+                record = "|" + encode(deadline.getBy().toString());
             } else if (task instanceof Event event) {
                 type = "E";
-                record = "|" + encode(event.getFrom()) + "|" + encode(event.getTo());
+                record = "|" + encode(event.getFrom().toString()) + "|"
+                        + encode(event.getTo().toString());
             } else {
                 type = "T";
             }
@@ -170,13 +173,14 @@ public class TaskList {
                     if (parts.length != 4) {
                         return null;
                     }
-                    task = new Deadline(description, decode(parts[3]));
+                    task = new Deadline(description, LocalDateTime.parse(decode(parts[3])));
                     break;
                 case "E":
                     if (parts.length != 5) {
                         return null;
                     }
-                    task = new Event(description, decode(parts[3]), decode(parts[4]));
+                    task = new Event(description, LocalDateTime.parse(decode(parts[3])),
+                            LocalDateTime.parse(decode(parts[4])));
                     break;
                 default:
                     return null;
@@ -186,7 +190,7 @@ public class TaskList {
                 task.markDone();
             }
             return task;
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | DateTimeException exception) {
             return null;
         }
     }

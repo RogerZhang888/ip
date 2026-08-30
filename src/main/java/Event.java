@@ -1,21 +1,28 @@
+import java.time.LocalDateTime;
+
 /** A task that takes place between a specified start and end time. */
 public class Event extends Task {
-    private final String from;
-    private final String to;
+    private final LocalDateTime from;
+    private final LocalDateTime to;
 
     public Event(String description, String from, String to) {
+        this(description, DateTimeParser.parse(from), DateTimeParser.parse(to));
+    }
+
+    /** Creates an event with already parsed start and end dates and times. */
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
         this.to = to;
     }
 
     /** Returns the start time of this event. */
-    public String getFrom() {
+    public LocalDateTime getFrom() {
         return this.from;
     }
 
     /** Returns the end time of this event. */
-    public String getTo() {
+    public LocalDateTime getTo() {
         return this.to;
     }
 
@@ -26,6 +33,7 @@ public class Event extends Task {
 
     @Override
     protected String getTimeDetails() {
-        return String.format(" (from: %s to: %s)", this.from, this.to);
+        return String.format(" (from: %s to: %s)", DateTimeParser.format(this.from),
+                DateTimeParser.format(this.to));
     }
 }

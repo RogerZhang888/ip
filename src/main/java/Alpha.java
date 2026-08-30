@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /** Runs Alpha's text-based user interface. */
@@ -71,7 +73,7 @@ public class Alpha {
         }
     }
 
-    /** Parses a deadline command using the form: deadline description /by date. */
+    /** Parses a deadline command using the form: deadline description /by date or time. */
     private static String addDeadline(TaskList list, String details) throws AlphaException {
         int markerIndex = details.indexOf("/by");
         if (markerIndex < 0) {
@@ -86,7 +88,7 @@ public class Alpha {
         if (by.isEmpty()) {
             throw new AlphaException("A deadline needs a date or time after /by.");
         }
-        return list.addTask(new Deadline(description, by));
+        return list.addTask(new Deadline(description, parseDateTime(by)));
     }
 
     /** Parses an event command using the form: event description /from start /to end. */
@@ -112,7 +114,16 @@ public class Alpha {
         if (to.isEmpty()) {
             throw new AlphaException("An event needs an end time after /to.");
         }
-        return list.addTask(new Event(description, from, to));
+        return list.addTask(new Event(description, parseDateTime(from), parseDateTime(to)));
+    }
+
+    /** Parses the supported date/time formats and converts parse failures into user errors. */
+    private static LocalDateTime parseDateTime(String value) throws AlphaException {
+        try {
+            return DateTimeParser.parse(value);
+        } catch (DateTimeParseException exception) {
+            throw new AlphaException("Please use a date such as 2019-10-15 or a date/time such as 2/12/2019 1800.");
+        }
     }
 
     /** Updates a task's status and returns the message shown to the user. */
