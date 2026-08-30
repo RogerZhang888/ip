@@ -1,3 +1,5 @@
+import java.nio.file.Path;
+
 public class Chatbot {
     // singleton (there can only be one instance of Chatbot)
     private static Chatbot instance;
@@ -5,9 +7,11 @@ public class Chatbot {
     private static String greeting = String.format("Hello! I am %s. What can I do for you?", Chatbot.name);
     private static String exit = String.format("Bye. Hope to see you again!");
     private static boolean open = false;
-    private static TaskList list = new TaskList();
+    private static final Path DATA_FILE = Path.of("data", "duke.txt");
+    private static TaskList list;
 
     private Chatbot() {
+        Chatbot.list = new TaskList(Chatbot.DATA_FILE);
     }
 
     public static synchronized Chatbot getChatbot() {
