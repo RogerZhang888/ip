@@ -2,15 +2,15 @@ package alpha.task;
 
 /** Represents one task in Alpha's task list. */
 public class Task {
-    private static int COUNTER = 0;
+    private static int counter = 0;
     private final int id;
     private final String description;
     private boolean done = false;
 
     /** Creates an unfinished task with the supplied description. */
     public Task(String description) {
-        this.id = COUNTER;
-        Task.COUNTER ++;
+        this.id = Task.counter;
+        Task.counter++;
         this.description = description;
     }
 
