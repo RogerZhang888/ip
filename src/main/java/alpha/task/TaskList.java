@@ -3,6 +3,7 @@ package alpha.task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /** Stores and updates the tasks entered by the user. */
 public class TaskList {
@@ -63,6 +64,18 @@ public class TaskList {
     /** Returns a read-only view of the tasks for persistence and display. */
     public List<Task> getTasks() {
         return Collections.unmodifiableList(this.tasks);
+    }
+
+    /** Returns tasks whose descriptions contain the keyword, ignoring letter case. */
+    public List<Task> findTasks(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        for (Task task : this.tasks) {
+            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return Collections.unmodifiableList(matchingTasks);
     }
 
     /** Marks the task at the given one-based list number as done. */

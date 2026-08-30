@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import alpha.AlphaException;
 import alpha.task.Deadline;
 import alpha.task.Event;
-import alpha.task.Task;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +36,15 @@ class ParserTest {
         assertEquals(LocalDateTime.of(2019, 10, 15, 16, 0), event.getTo());
     }
 
+    /** Verifies that a find command preserves its keyword for task-list searching. */
+    @Test
+    void parsesFindCommand() throws AlphaException {
+        Parser.Command command = this.parser.parse("find Book");
+
+        assertEquals(Parser.CommandType.FIND, command.getType());
+        assertEquals("Book", command.getKeyword());
+    }
+
     /** Verifies that incomplete, invalid, and non-numeric commands are rejected. */
     @Test
     void rejectsMissingTaskDetailsAndInvalidDates() {
@@ -45,5 +53,6 @@ class ParserTest {
                 () -> this.parser.parse("deadline submit report /by 2019-02-30"));
         assertThrows(AlphaException.class,
                 () -> this.parser.parse("mark not-a-number"));
+        assertThrows(AlphaException.class, () -> this.parser.parse("find"));
     }
 }

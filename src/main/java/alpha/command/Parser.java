@@ -16,6 +16,7 @@ public class Parser {
         ADD,
         BYE,
         DELETE,
+        FIND,
         LIST,
         MARK,
         UNMARK
@@ -26,11 +27,21 @@ public class Parser {
         private final CommandType type;
         private final Task task;
         private final int taskNumber;
+        private final String keyword;
 
         private Command(CommandType type, Task task, int taskNumber) {
+            this(type, task, taskNumber, null);
+        }
+
+        private Command(CommandType type, String keyword) {
+            this(type, null, 0, keyword);
+        }
+
+        private Command(CommandType type, Task task, int taskNumber, String keyword) {
             this.type = type;
             this.task = task;
             this.taskNumber = taskNumber;
+            this.keyword = keyword;
         }
 
         /** Returns the command operation. */
@@ -47,6 +58,11 @@ public class Parser {
         public int getTaskNumber() {
             return this.taskNumber;
         }
+
+        /** Returns the search keyword for a find command. */
+        public String getKeyword() {
+            return this.keyword;
+        }
     }
 
     /** Parses one complete user input line. */
@@ -61,6 +77,9 @@ public class Parser {
         }
         if (command.equals("list")) {
             return new Command(CommandType.LIST, null, 0);
+        }
+        if (command.equals("find") || command.startsWith("find ")) {
+            return new Command(CommandType.FIND, parseKeyword(command));
         }
         if (command.equals("mark") || command.startsWith("mark ")) {
             return new Command(CommandType.MARK, null, parseTaskNumber(command));
@@ -85,7 +104,7 @@ public class Parser {
             default:
                 throw new AlphaException(
                         "I don't recognise that command. Try todo, deadline, event, list, "
-                                + "mark, unmark, delete, or bye.");
+                                + "find, mark, unmark, delete, or bye.");
         }
     }
 
@@ -162,5 +181,14 @@ public class Parser {
         } catch (NumberFormatException exception) {
             throw new AlphaException("Task numbers must be whole numbers.");
         }
+    }
+
+    /** Parses the non-empty keyword from a find command. */
+    private String parseKeyword(String command) throws AlphaException {
+        String[] parts = command.split("\\s+", 2);
+        if (parts.length != 2 || parts[1].trim().isEmpty()) {
+            throw new AlphaException("Please provide a keyword to search for, for example: find book.");
+        }
+        return parts[1].trim();
     }
 }

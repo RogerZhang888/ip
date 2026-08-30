@@ -70,6 +70,9 @@ public class Alpha {
             case LIST:
                 this.ui.showTasks(this.tasks);
                 break;
+            case FIND:
+                this.ui.showFound(this.tasks.findTasks(command.getKeyword()));
+                break;
             case MARK:
                 this.updateTaskStatus(command.getTaskNumber(), true);
                 break;
