@@ -1,179 +1,134 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.Scanner;
+import java.nio.file.Path;
 
-/** Runs Alpha's text-based user interface. */
+/** Coordinates Alpha's user interface, command parser, task list, and storage. */
 public class Alpha {
-    public static void main(String[] args) {
-        String banner = "    _    _     ____  _   _    _    \n"
-                + "   / \\  | |   |  _ \\| | | |  / \\   \n"
-                + "  / _ \\ | |   | |_) | |_| | / _ \\  \n"
-                + " / ___ \\| |___|  __/|  _  |/ ___ \\ \n"
-                + "/_/   \\_\\_____|_|   |_| |_/_/   \\_\\\n";
-        System.out.println(banner);
-        Chatbot chatbot = Chatbot.getChatbot();
-        System.out.println(chatbot.getGreeting());
+    private static final Path DATA_FILE = Path.of("data", "duke.txt");
+    private final Ui ui;
+    private final Storage storage;
+    private final Parser parser;
+    private final TaskList tasks;
 
-        Scanner scanner = new Scanner(System.in);
-        while (chatbot.isOpen()) {
-            String input = scanner.nextLine();
-            String command = input.trim();
-            try {
-                if (command.equals("mark") || command.startsWith("mark ")) {
-                    System.out.println(updateTaskStatus(chatbot.getList(), command, true));
-                    continue;
-                }
-                if (command.equals("unmark") || command.startsWith("unmark ")) {
-                    System.out.println(updateTaskStatus(chatbot.getList(), command, false));
-                    continue;
-                }
-                if (command.equals("delete") || command.startsWith("delete ")) {
-                    System.out.println(deleteTask(chatbot.getList(), command));
-                    continue;
-                }
+    /** Creates Alpha using the default relative task-data path. */
+    public Alpha() {
+        this(Alpha.DATA_FILE);
+    }
 
-                switch (command) {
-                    case "bye":
-                        chatbot.close();
+    /** Creates Alpha using a custom task-data path. */
+    public Alpha(String filePath) {
+        this(Path.of(filePath));
+    }
+
+    /** Creates Alpha using a custom path and UI, which is useful for testing. */
+    public Alpha(Path filePath, Ui ui) {
+        this.ui = ui;
+        this.storage = new Storage(filePath);
+        this.parser = new Parser();
+        this.tasks = this.loadTasks();
+    }
+
+    /** Creates Alpha using a custom task-data path and the standard UI. */
+    public Alpha(Path filePath) {
+        this(filePath, new Ui());
+    }
+
+    /** Runs Alpha until the user enters {@code bye} or input ends. */
+    public void run() {
+        this.ui.showWelcome();
+        try {
+            String input;
+            while ((input = this.ui.readCommand()) != null) {
+                try {
+                    if (!this.execute(this.parser.parse(input))) {
                         break;
-                    case "list":
-                        System.out.println(chatbot.getList());
-                        break;
-                    default:
-                        System.out.println(addTypedTask(chatbot.getList(), command));
+                    }
+                } catch (AlphaException exception) {
+                    this.ui.showError(exception.getMessage());
                 }
-            } catch (AlphaException exception) {
-                System.out.println("Oops! " + exception.getMessage());
             }
+        } finally {
+            this.ui.close();
         }
-        scanner.close();
     }
 
-    /** Parses a todo, deadline, or event command. */
-    private static String addTypedTask(TaskList list, String input) throws AlphaException {
-        if (input.isEmpty()) {
-            throw new AlphaException("Please enter a command.");
-        }
-
-        String[] commandParts = input.split("\\s+", 2);
-        String command = commandParts[0];
-        String details = commandParts.length == 2 ? commandParts[1].trim() : "";
-        switch (command) {
-            case "todo":
-                if (details.isEmpty()) {
-                    throw new AlphaException("A todo needs a description.");
-                }
-                return list.addTask(new Todo(details));
-            case "deadline":
-                return addDeadline(list, details);
-            case "event":
-                return addEvent(list, details);
+    /** Executes one parsed command. */
+    private boolean execute(Parser.Command command) throws AlphaException {
+        switch (command.getType()) {
+            case ADD:
+                Task addedTask = this.tasks.addTask(command.getTask());
+                this.saveTasks();
+                this.ui.showAdded(addedTask, this.tasks.size());
+                break;
+            case LIST:
+                this.ui.showTasks(this.tasks);
+                break;
+            case MARK:
+                this.updateTaskStatus(command.getTaskNumber(), true);
+                break;
+            case UNMARK:
+                this.updateTaskStatus(command.getTaskNumber(), false);
+                break;
+            case DELETE:
+                this.deleteTask(command.getTaskNumber());
+                break;
+            case BYE:
+                this.ui.showGoodbye();
+                return false;
             default:
-                throw new AlphaException("I don't recognise that command. Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                throw new AlphaException("I don't recognise that command.");
         }
+        return true;
     }
 
-    /** Parses a deadline command using the form: deadline description /by date or time. */
-    private static String addDeadline(TaskList list, String details) throws AlphaException {
-        int markerIndex = details.indexOf("/by");
-        if (markerIndex < 0) {
-            throw new AlphaException("A deadline needs a description followed by /by and a date or time.");
-        }
-
-        String description = details.substring(0, markerIndex).trim();
-        String by = details.substring(markerIndex + 3).trim();
-        if (description.isEmpty()) {
-            throw new AlphaException("A deadline needs a description.");
-        }
-        if (by.isEmpty()) {
-            throw new AlphaException("A deadline needs a date or time after /by.");
-        }
-        return list.addTask(new Deadline(description, parseDateTime(by)));
-    }
-
-    /** Parses an event command using the form: event description /from start /to end. */
-    private static String addEvent(TaskList list, String details) throws AlphaException {
-        int fromIndex = details.indexOf("/from");
-        int toIndex = details.indexOf("/to", fromIndex + 5);
-        if (fromIndex < 0) {
-            throw new AlphaException("An event needs a description followed by /from and /to times.");
-        }
-        if (toIndex < 0) {
-            throw new AlphaException("An event needs an end time after /to.");
-        }
-
-        String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 5, toIndex).trim();
-        String to = details.substring(toIndex + 3).trim();
-        if (description.isEmpty()) {
-            throw new AlphaException("An event needs a description.");
-        }
-        if (from.isEmpty()) {
-            throw new AlphaException("An event needs a start time after /from.");
-        }
-        if (to.isEmpty()) {
-            throw new AlphaException("An event needs an end time after /to.");
-        }
-        return list.addTask(new Event(description, parseDateTime(from), parseDateTime(to)));
-    }
-
-    /** Parses the supported date/time formats and converts parse failures into user errors. */
-    private static LocalDateTime parseDateTime(String value) throws AlphaException {
-        try {
-            return DateTimeParser.parse(value);
-        } catch (DateTimeParseException exception) {
-            throw new AlphaException("Please use a date such as 2019-10-15 or a date/time such as 2/12/2019 1800.");
-        }
-    }
-
-    /** Updates a task's status and returns the message shown to the user. */
-    private static String updateTaskStatus(TaskList list, String command, boolean done) throws AlphaException {
-        String[] parts = command.split("\\s+");
-        if (parts.length != 2) {
-            throw new AlphaException("Please provide a task number, for example: mark 2.");
-        }
-
-        int number;
-        try {
-            number = Integer.parseInt(parts[1]);
-        } catch (NumberFormatException exception) {
-            throw new AlphaException("Task numbers must be whole numbers.");
-        }
-
-        Task task = list.getTask(number);
-        if (task == null) {
-            throw new AlphaException("That task number does not exist.");
-        }
-
+    /** Marks or unmarks a task and saves the changed list. */
+    private void updateTaskStatus(int number, boolean done) throws AlphaException {
+        Task task = this.requireTask(number);
         if (done) {
-            list.markDone(number);
-            return String.format("Nice! I've marked this task as done:%n  %s", task);
+            this.tasks.markDone(number);
+        } else {
+            this.tasks.markUndone(number);
         }
-
-        list.markUndone(number);
-        return String.format("OK, I've marked this task as not done yet:%n  %s", task);
+        this.saveTasks();
+        this.ui.showMarked(task, done);
     }
 
-    /** Deletes the numbered task and returns the confirmation shown to the user. */
-    private static String deleteTask(TaskList list, String command) throws AlphaException {
-        String[] parts = command.split("\\s+");
-        if (parts.length != 2) {
-            throw new AlphaException("Please provide a task number, for example: delete 2.");
-        }
+    /** Deletes a task and saves the changed list. */
+    private void deleteTask(int number) throws AlphaException {
+        Task task = this.requireTask(number);
+        this.tasks.deleteTask(number);
+        this.saveTasks();
+        this.ui.showDeleted(task, this.tasks.size());
+    }
 
-        int number;
-        try {
-            number = Integer.parseInt(parts[1]);
-        } catch (NumberFormatException exception) {
-            throw new AlphaException("Task numbers must be whole numbers.");
-        }
-
-        Task task = list.deleteTask(number);
+    /** Returns a numbered task or reports that the number is invalid. */
+    private Task requireTask(int number) throws AlphaException {
+        Task task = this.tasks.getTask(number);
         if (task == null) {
             throw new AlphaException("That task number does not exist.");
         }
+        return task;
+    }
 
-        return String.format("Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
-                task, list.size());
+    /** Loads saved tasks, falling back to an empty list when storage cannot be read. */
+    private TaskList loadTasks() {
+        try {
+            return new TaskList(this.storage.load());
+        } catch (StorageException exception) {
+            this.ui.showLoadingError();
+            return new TaskList();
+        }
+    }
+
+    /** Saves the current task list and reports failures without losing in-memory changes. */
+    private void saveTasks() {
+        try {
+            this.storage.save(this.tasks);
+        } catch (StorageException exception) {
+            this.ui.showSavingError();
+        }
+    }
+
+    /** Starts Alpha from the command line. */
+    public static void main(String[] args) {
+        new Alpha().run();
     }
 }
