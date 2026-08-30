@@ -15,6 +15,11 @@ public class Task {
         return this.id;
     }
 
+    /** Returns the text describing this task. */
+    public String getDescription() {
+        return this.description;
+    }
+
     public String toString() {
         String status = this.done ? "X" : " ";
         return String.format("[%s][%s] %s%s", this.getTypeIcon(), status,
