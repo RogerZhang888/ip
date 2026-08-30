@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /** Tests task-list mutation, one-based indexing, and encapsulation. */
@@ -43,5 +44,19 @@ class TaskListTest {
 
         assertThrows(UnsupportedOperationException.class,
                 () -> tasks.getTasks().add(new Todo("write notes")));
+    }
+
+    /** Verifies case-insensitive keyword matching is limited to task descriptions. */
+    @Test
+    void findsTasksByDescription() {
+        TaskList tasks = new TaskList();
+        Task book = tasks.addTask("Read a BOOK");
+        tasks.addTask(new Deadline("submit report", LocalDateTime.of(2019, 12, 2, 18, 0)));
+
+        List<Task> matches = tasks.findTasks("book");
+
+        assertEquals(1, matches.size());
+        assertSame(book, matches.get(0));
+        assertTrue(tasks.findTasks("missing").isEmpty());
     }
 }

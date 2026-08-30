@@ -14,9 +14,41 @@ Alpha is a command-line task manager written in Java. You can create todos, dead
 3. Open `src/main/java/alpha/Alpha.java`.
 4. Right-click the file and select **Run `Alpha.main()`**.
 
-## Running from a terminal
+On macOS, if you use SDKMAN, select Java 25 before compiling:
 
-From the project root, compile the source files and start Alpha:
+```bash
+sdk use java 25.0.3.fx-zulu
+```
+
+## Running with Gradle
+
+Gradle is the recommended way to run Alpha because it compiles the project and uses the configured `alpha.Alpha` entry point:
+
+```bash
+./gradlew --console=plain run
+```
+
+The `--console=plain` option hides Gradle's animated progress bar so it does not cover the chatbot output. Without that option, this also works:
+
+```bash
+./gradlew run
+```
+
+On Windows, use:
+
+```bat
+gradlew.bat --console=plain run
+```
+
+To run the JUnit tests with Gradle:
+
+```bash
+./gradlew test
+```
+
+## Running without Gradle
+
+You can also compile and run the same source files directly from the project root:
 
 ```bash
 mkdir -p out
@@ -24,11 +56,7 @@ javac -d out $(find src/main/java -name '*.java')
 java -cp out alpha.Alpha
 ```
 
-On macOS, if you use SDKMAN, select Java 25 before compiling:
-
-```bash
-sdk use java 25.0.3.fx-zulu
-```
+Both Gradle and non-Gradle workflows run the same `alpha.Alpha` application. Gradle additionally manages compilation, dependencies, and tests.
 
 ## Commands
 
@@ -78,9 +106,16 @@ Dates can be entered as `yyyy-MM-dd`, such as `2019-10-15`. Date/time values can
 
 ```text
 list
+find <keyword>
 mark <task number>
 unmark <task number>
 delete <task number>
+```
+
+The `find` command searches task descriptions without regard to letter case. For example:
+
+```text
+find book
 ```
 
 Task numbers are shown by the `list` command. For example:
@@ -113,7 +148,7 @@ The `data` folder and file are created automatically the first time a task is sa
 todo read a book
 deadline submit assignment /by 2019-12-06
 event team meeting /from 2019-12-06 1000 /to 2019-12-06 1100
-list
+find meeting
 mark 1
 bye
 ```

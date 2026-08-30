@@ -2,6 +2,7 @@ package alpha.ui;
 
 import alpha.task.Task;
 import alpha.task.TaskList;
+import java.util.List;
 import java.util.Scanner;
 
 /** Handles all interaction between Alpha and the user. */
@@ -49,6 +50,20 @@ public class Ui {
     /** Shows the current tasks. */
     public void showTasks(TaskList tasks) {
         System.out.println(tasks);
+    }
+
+    /** Shows the tasks whose descriptions match a search keyword. */
+    public void showFound(List<Task> matchingTasks) {
+        if (matchingTasks.isEmpty()) {
+            this.showMessage("No matching tasks found.");
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            builder.append(String.format("%n%d.%s", i + 1, matchingTasks.get(i)));
+        }
+        this.showMessage(builder.toString());
     }
 
     /** Shows confirmation after adding a task. */
