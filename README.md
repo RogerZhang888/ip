@@ -11,7 +11,7 @@ Alpha is a command-line task manager written in Java. You can create todos, dead
 
 1. Open this project in IntelliJ IDEA.
 2. Set the project SDK to JDK 25 and use the SDK default language level.
-3. Open `src/main/java/Alpha.java`.
+3. Open `src/main/java/alpha/Alpha.java`.
 4. Right-click the file and select **Run `Alpha.main()`**.
 
 ## Running from a terminal
@@ -20,8 +20,8 @@ From the project root, compile the source files and start Alpha:
 
 ```bash
 mkdir -p out
-javac -d out src/main/java/*.java
-java -cp out Alpha
+javac -d out $(find src/main/java -name '*.java')
+java -cp out alpha.Alpha
 ```
 
 On macOS, if you use SDKMAN, select Java 25 before compiling:

@@ -1,3 +1,5 @@
+package alpha.task;
+
 /** Represents one task in Alpha's task list. */
 public class Task {
     private static int COUNTER = 0;

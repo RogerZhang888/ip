@@ -1,3 +1,7 @@
+package alpha.ui;
+
+import alpha.task.Task;
+import alpha.task.TaskList;
 import java.util.Scanner;
 
 /** Handles all interaction between Alpha and the user. */

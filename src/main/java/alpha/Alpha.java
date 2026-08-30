@@ -1,3 +1,11 @@
+package alpha;
+
+import alpha.command.Parser;
+import alpha.storage.Storage;
+import alpha.storage.StorageException;
+import alpha.task.Task;
+import alpha.task.TaskList;
+import alpha.ui.Ui;
 import java.nio.file.Path;
 
 /** Coordinates Alpha's user interface, command parser, task list, and storage. */
