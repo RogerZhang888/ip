@@ -55,7 +55,7 @@ deadline <description> /by <date or time>
 Example:
 
 ```text
-deadline return library book /by June 6th
+deadline return library book /by 2019-06-06
 ```
 
 ### Add an event
@@ -69,8 +69,10 @@ event <description> /from <start time> /to <end time>
 Example:
 
 ```text
-event project meeting /from Aug 6th 2pm /to Aug 6th 4pm
+event project meeting /from 2019-08-06 1400 /to 2019-08-06 1600
 ```
+
+Dates can be entered as `yyyy-MM-dd`, such as `2019-10-15`. Date/time values can use `yyyy-MM-dd HHmm`, such as `2019-10-15 1800`, or the day-first format `d/M/yyyy HHmm`, such as `2/12/2019 1800`. Alpha displays parsed values in a readable format such as `Dec 02 2019 18:00`.
 
 ### View and update tasks
 
@@ -109,8 +111,8 @@ The `data` folder and file are created automatically the first time a task is sa
 
 ```text
 todo read a book
-deadline submit assignment /by Friday
-event team meeting /from Monday 10am /to Monday 11am
+deadline submit assignment /by 2019-12-06
+event team meeting /from 2019-12-06 1000 /to 2019-12-06 1100
 list
 mark 1
 bye
