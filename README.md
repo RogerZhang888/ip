@@ -40,6 +40,30 @@ On Windows, use:
 gradlew.bat --console=plain run
 ```
 
+## Packaging the application
+
+To create a distributable executable JAR, run:
+
+```bash
+./gradlew shadowJar
+```
+
+The JAR is written to `build/libs/duke.jar`. The regular `build` task also
+creates this JAR automatically:
+
+```bash
+./gradlew build
+```
+
+Copy `build/libs/duke.jar` into an empty folder and run it from that folder:
+
+```bash
+java -jar "duke.jar"
+```
+
+The JAR includes the application's runtime classes and its entry point, so no
+Gradle installation or project files are needed in the distribution folder.
+
 To run the JUnit tests with Gradle:
 
 ```bash
