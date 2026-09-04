@@ -1,18 +1,18 @@
 # Alpha Task Manager
 
-Alpha is a command-line task manager written in Java. You can create todos, deadlines, and events, mark tasks as complete, and delete tasks. Tasks are saved automatically and restored the next time the application starts.
+Alpha is a JavaFX task manager written in Java. You can create todos, deadlines, and events, mark tasks as complete, and delete tasks. Tasks are saved automatically and restored the next time the application starts.
 
 ## Requirements
 
 - Java Development Kit (JDK) 25
 - IntelliJ IDEA, or a terminal with `javac` and `java`
 
-## Running the application in IntelliJ IDEA
+## Running the GUI in IntelliJ IDEA
 
 1. Open this project in IntelliJ IDEA.
 2. Set the project SDK to JDK 25 and use the SDK default language level.
-3. Open `src/main/java/alpha/Alpha.java`.
-4. Right-click the file and select **Run `Alpha.main()`**.
+3. Open `src/main/java/alpha/gui/GuiLauncher.java`.
+4. Right-click the file and select **Run `GuiLauncher.main()`**.
 
 On macOS, if you use SDKMAN, select Java 25 before compiling:
 
@@ -22,7 +22,7 @@ sdk use java 25.0.3.fx-zulu
 
 ## Running with Gradle
 
-Gradle is the recommended way to run Alpha because it compiles the project and uses the configured `alpha.Alpha` entry point:
+Gradle is the recommended way to run Alpha because it compiles the project and uses the configured JavaFX entry point:
 
 ```bash
 ./gradlew --console=plain run
@@ -72,15 +72,19 @@ To run the JUnit tests with Gradle:
 
 ## Running without Gradle
 
-You can also compile and run the same source files directly from the project root:
+You can also compile and run the source files directly from the project root when using the Java 25 distribution bundled with JavaFX:
 
 ```bash
 mkdir -p out
-javac -d out $(find src/main/java -name '*.java')
-java -cp out alpha.Alpha
+JAVA_HOME_PATH=$(java -XshowSettings:properties -version 2>&1 | awk -F'= ' '/java.home/ {print $2; exit}')
+javac --release 25 --module-path "$JAVA_HOME_PATH/jmods" \
+  --add-modules javafx.controls,javafx.fxml -d out $(find src/main/java -name '*.java')
+cp -R src/main/resources/. out/
+java --module-path "$JAVA_HOME_PATH/jmods" --add-modules javafx.controls,javafx.fxml \
+  -cp out alpha.gui.GuiLauncher
 ```
 
-Both Gradle and non-Gradle workflows run the same `alpha.Alpha` application. Gradle additionally manages compilation, dependencies, and tests.
+The command-line version remains available through `alpha.Alpha`. Gradle manages compilation, JavaFX dependencies, and tests.
 
 ## Commands
 
