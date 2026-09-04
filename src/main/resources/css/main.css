@@ -1,0 +1,48 @@
+.root {
+    -fx-background-color: #f5f7fb;
+    -fx-font-family: "System";
+}
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #243447;
+}
+
+.count-label {
+    -fx-text-fill: #607d8b;
+    -fx-font-size: 14px;
+}
+
+.hint-label {
+    -fx-text-fill: #607d8b;
+}
+
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #d9e1ea;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 8px;
+}
+
+.task-description {
+    -fx-text-fill: #243447;
+}
+
+.completed-task {
+    -fx-text-fill: #78909c;
+    -fx-strikethrough: true;
+}
+
+.feedback-label {
+    -fx-background-color: white;
+    -fx-border-color: #d9e1ea;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px;
+}
