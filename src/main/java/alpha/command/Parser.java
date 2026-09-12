@@ -103,7 +103,7 @@ public class Parser {
                 return new Command(CommandType.ADD, parseEvent(details), 0);
             default:
                 throw new AlphaException(
-                        "I don't recognise that command. Try todo, deadline, event, list, "
+                        "I don't recognise that command yet. Try todo, deadline, event, list, "
                                 + "find, mark, unmark, delete, or bye.");
         }
     }

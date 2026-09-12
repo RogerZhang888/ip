@@ -7,13 +7,13 @@ import java.util.Scanner;
 
 /** Handles all interaction between Alpha and the user. */
 public class Ui {
-    private static final String BANNER = "    _    _     ____  _   _    _    \n"
-            + "   / \\  | |   |  _ \\| | | |  / \\   \n"
-            + "  / _ \\ | |   | |_) | |_| | / _ \\  \n"
-            + " / ___ \\| |___|  __/|  _  |/ ___ \\ \n"
-            + "/_/   \\_\\_____|_|   |_| |_/_/   \\_\\\n";
-    private static final String GREETING = "Hello! I am Alpha. What can I do for you?";
-    private static final String EXIT_MESSAGE = "Bye. Hope to see you again!";
+    private static final String BANNER = " __  __   ___   ____ ____\n"
+            + "|  \\/  | / _ \\ / ___/ ___|\n"
+            + "| |\\/| || | | |\\___ \\___ \\n"
+            + "| |  | || |_| | ___) |___) |\n"
+            + "|_|  |_| \\___/ |____/|____/\n";
+    private static final String GREETING = "Hello! I'm Moss, your quiet task gardener. What shall we tend today?";
+    private static final String EXIT_MESSAGE = "The garden can rest now. See you next time!";
     private final Scanner scanner;
 
     /** Creates a UI that reads commands from standard input. */
@@ -44,7 +44,7 @@ public class Ui {
 
     /** Shows a command error to the user. */
     public void showError(String message) {
-        System.out.println("Oops! " + message);
+        System.out.println("Moss says: " + message);
     }
 
     /** Shows the current tasks. */
@@ -55,11 +55,11 @@ public class Ui {
     /** Shows the tasks whose descriptions match a search keyword. */
     public void showFound(List<Task> matchingTasks) {
         if (matchingTasks.isEmpty()) {
-            this.showMessage("No matching tasks found.");
+            this.showMessage("Nothing sprouted for that search.");
             return;
         }
 
-        StringBuilder builder = new StringBuilder("Here are the matching tasks in your list:");
+        StringBuilder builder = new StringBuilder("Here's what Moss found in your garden:");
         for (int i = 0; i < matchingTasks.size(); i++) {
             builder.append(String.format("%n%d.%s", i + 1, matchingTasks.get(i)));
         }
@@ -68,32 +68,32 @@ public class Ui {
 
     /** Shows confirmation after adding a task. */
     public void showAdded(Task task, int taskCount) {
-        this.showMessage(String.format("Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+        this.showMessage(String.format("Planted your task:%n  %s%nYour garden now has %d tasks.",
                 task, taskCount));
     }
 
     /** Shows confirmation after marking a task. */
     public void showMarked(Task task, boolean done) {
         String message = done
-                ? "Nice! I've marked this task as done:"
-                : "OK, I've marked this task as not done yet:";
+                ? "Nicely tended—this task is complete:"
+                : "No worries—I've reopened this task:";
         this.showMessage(String.format("%s%n  %s", message, task));
     }
 
     /** Shows confirmation after deleting a task. */
     public void showDeleted(Task task, int taskCount) {
-        this.showMessage(String.format("Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+        this.showMessage(String.format("Pruned this task:%n  %s%nYour garden now has %d tasks.",
                 task, taskCount));
     }
 
     /** Shows a problem encountered while loading saved tasks. */
     public void showLoadingError() {
-        this.showMessage("Warning: Could not load saved tasks. Starting with an empty task list.");
+        this.showMessage("Moss couldn't reopen your task garden, so we're starting with a fresh patch.");
     }
 
     /** Shows a problem encountered while saving tasks. */
     public void showSavingError() {
-        this.showMessage("Warning: Could not save tasks.");
+        this.showMessage("Moss couldn't save the latest garden changes.");
     }
 
     /** Shows the exit message. */

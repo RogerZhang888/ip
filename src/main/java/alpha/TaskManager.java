@@ -33,7 +33,7 @@ public class TaskManager {
             warning = null;
         } catch (StorageException exception) {
             loadedTasks = new TaskList();
-            warning = "Warning: Could not load saved tasks. Starting with an empty task list.";
+            warning = "Moss couldn't reopen your task garden, so we're starting with a fresh patch.";
         }
         this.tasks = loadedTasks;
         this.loadingWarning = warning;
@@ -88,16 +88,16 @@ public class TaskManager {
             case DELETE:
                 return this.deleteTask(command.getTaskNumber());
             case BYE:
-                return new CommandResult("Bye. Hope to see you again!", true);
+                return new CommandResult("The garden can rest now. See you next time!", true);
             default:
-                throw new AlphaException("I don't recognise that command.");
+                throw new AlphaException("I don't recognise that command yet.");
         }
     }
 
     /** Adds a task, saves it, and creates the corresponding response. */
     private CommandResult addTask(Task task) {
         Task addedTask = this.tasks.addTask(task);
-        String message = String.format("Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+        String message = String.format("Planted your task:%n  %s%nYour garden now has %d tasks.",
                 addedTask, this.tasks.size());
         return new CommandResult(this.withSavingWarning(message), false);
     }
@@ -106,10 +106,10 @@ public class TaskManager {
     private CommandResult findTasks(String keyword) {
         List<Task> matchingTasks = this.tasks.findTasks(keyword);
         if (matchingTasks.isEmpty()) {
-            return new CommandResult("No matching tasks found.", false);
+            return new CommandResult("Nothing sprouted for that search.", false);
         }
 
-        StringBuilder builder = new StringBuilder("Here are the matching tasks in your list:");
+        StringBuilder builder = new StringBuilder("Here's what Moss found in your garden:");
         for (int i = 0; i < matchingTasks.size(); i++) {
             builder.append(String.format("%n%d.%s", i + 1, matchingTasks.get(i)));
         }
@@ -126,8 +126,8 @@ public class TaskManager {
         }
 
         String message = done
-                ? "Nice! I've marked this task as done:"
-                : "OK, I've marked this task as not done yet:";
+                ? "Nicely tended—this task is complete:"
+                : "No worries—I've reopened this task:";
         message = String.format("%s%n  %s", message, task);
         return new CommandResult(this.withSavingWarning(message), false);
     }
@@ -136,7 +136,7 @@ public class TaskManager {
     private CommandResult deleteTask(int number) throws AlphaException {
         Task task = this.requireTask(number);
         this.tasks.deleteTask(number);
-        String message = String.format("Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+        String message = String.format("Pruned this task:%n  %s%nYour garden now has %d tasks.",
                 task, this.tasks.size());
         return new CommandResult(this.withSavingWarning(message), false);
     }
@@ -156,7 +156,7 @@ public class TaskManager {
             this.storage.save(this.tasks);
             return message;
         } catch (StorageException exception) {
-            return message + System.lineSeparator() + "Warning: Could not save tasks.";
+            return message + System.lineSeparator() + "Moss couldn't save the latest garden changes.";
         }
     }
 }

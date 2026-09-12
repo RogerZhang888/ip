@@ -56,7 +56,7 @@ public class MainWindow {
                 Platform.exit();
             }
         } catch (AlphaException exception) {
-            this.showFeedback("Oops! " + exception.getMessage(), "error");
+            this.showFeedback("Moss says: " + exception.getMessage(), "error");
         }
     }
 

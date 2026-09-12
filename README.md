@@ -1,6 +1,6 @@
-# Alpha Task Manager
+# Moss — Quiet Task Garden
 
-Alpha is a JavaFX task manager written in Java. You can create todos, deadlines, and events, mark tasks as complete, and delete tasks. Tasks are saved automatically and restored the next time the application starts.
+Moss is a calm, garden-themed JavaFX task manager written in Java. Moss helps you plant todos, deadlines, and events, tend tasks as they are completed, and prune tasks you no longer need. Tasks are saved automatically and restored the next time the application starts.
 
 ## Requirements
 
@@ -22,13 +22,13 @@ sdk use java 25.0.3.fx-zulu
 
 ## Running with Gradle
 
-Gradle is the recommended way to run Alpha because it compiles the project and uses the configured JavaFX entry point:
+Gradle is the recommended way to run Moss because it compiles the project and uses the configured JavaFX entry point:
 
 ```bash
 ./gradlew --console=plain run
 ```
 
-The `--console=plain` option hides Gradle's animated progress bar so it does not cover the chatbot output. Without that option, this also works:
+The `--console=plain` option keeps Gradle's output compact while Moss is running. Without that option, this also works:
 
 ```bash
 ./gradlew run
@@ -84,7 +84,19 @@ java --module-path "$JAVA_HOME_PATH/jmods" --add-modules javafx.controls,javafx.
   -cp out alpha.gui.GuiLauncher
 ```
 
-The command-line version remains available through `alpha.Alpha`. Gradle manages compilation, JavaFX dependencies, and tests.
+The command-line version remains available through `alpha.Alpha`. It uses the same Moss personality and commands. Gradle manages compilation, JavaFX dependencies, and tests.
+
+## Moss's GUI
+
+The GUI is designed as a small, focused task garden:
+
+- The header identifies Moss and shows the current number of tasks.
+- Tasks appear as compact cards with a task number, completion control, and delete control.
+- The feedback panel uses green for successful actions, amber for loading warnings, and red for invalid commands.
+- The command box at the bottom is Moss's main conversation point. Press **Enter** or click **Tend** to run a command.
+- The window can be resized; the task area expands to use the available space.
+
+Moss speaks in a gentle gardening metaphor: tasks are planted, completed tasks are tended, and unwanted tasks are pruned. The metaphor changes the wording and appearance only; the commands below remain the same.
 
 ## Commands
 
@@ -128,7 +140,7 @@ Example:
 event project meeting /from 2019-08-06 1400 /to 2019-08-06 1600
 ```
 
-Dates can be entered as `yyyy-MM-dd`, such as `2019-10-15`. Date/time values can use `yyyy-MM-dd HHmm`, such as `2019-10-15 1800`, or the day-first format `d/M/yyyy HHmm`, such as `2/12/2019 1800`. Alpha displays parsed values in a readable format such as `Dec 02 2019 18:00`.
+Dates can be entered as `yyyy-MM-dd`, such as `2019-10-15`. Date/time values can use `yyyy-MM-dd HHmm`, such as `2019-10-15 1800`, or the day-first format `d/M/yyyy HHmm`, such as `2/12/2019 1800`. Moss displays parsed values in a readable format such as `Dec 02 2019 18:00`.
 
 ### View and update tasks
 
@@ -162,7 +174,7 @@ bye
 
 ## Saving tasks
 
-Alpha saves the task list automatically after every add, delete, mark, and unmark operation. The data is stored in the relative path:
+Moss saves the task list automatically after every add, delete, mark, and unmark operation. The data is stored in the relative path:
 
 ```text
 data/duke.txt

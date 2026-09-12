@@ -15,25 +15,27 @@
     </padding>
     <children>
         <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="header-bar">
+            <Label text="✦" styleClass="brand-mark" />
             <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                <Label text="Alpha" styleClass="title-label" />
-                <Label text="A focused space for getting things done" styleClass="subtitle-label" />
+                <Label text="Moss" styleClass="title-label" />
+                <Label text="A quiet little garden for your next steps" styleClass="subtitle-label" />
             </VBox>
             <Label fx:id="taskCountLabel" styleClass="count-label" />
         </HBox>
-        <Label text="Try: todo, deadline, event, list, find, mark, or delete"
+        <Label text="Plant: todo, deadline, event  •  Tend: list, find, mark, delete"
                styleClass="hint-label" wrapText="true" />
         <ListView fx:id="taskListView" VBox.vgrow="ALWAYS">
             <placeholder>
-                <Label text="No tasks yet. Add one using the command box below."
+                <Label text="Your garden is empty. Plant a task below."
                        styleClass="empty-state-label" wrapText="true" />
             </placeholder>
         </ListView>
-        <Label fx:id="feedbackLabel" minHeight="36.0" styleClass="feedback-label" wrapText="true" />
+        <Label fx:id="feedbackLabel" text="Moss is ready when you are." minHeight="36.0"
+               styleClass="feedback-label" wrapText="true" />
         <HBox spacing="8.0" styleClass="command-bar">
-            <TextField fx:id="commandInput" promptText="Enter a command..." onAction="#handleCommand"
+            <TextField fx:id="commandInput" promptText="What should we tend?" onAction="#handleCommand"
                        HBox.hgrow="ALWAYS" />
-            <Button text="Run command" styleClass="run-button" onAction="#handleCommand" defaultButton="true" />
+            <Button text="Tend" styleClass="run-button" onAction="#handleCommand" defaultButton="true" />
         </HBox>
     </children>
 </VBox>
