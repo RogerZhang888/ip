@@ -45,6 +45,14 @@ class ParserTest {
         assertEquals("Book", command.getKeyword());
     }
 
+    /** Verifies that the sort command is converted into a sort operation. */
+    @Test
+    void parsesSortCommand() throws AlphaException {
+        Parser.Command command = this.parser.parse("sort");
+
+        assertEquals(Parser.CommandType.SORT, command.getType());
+    }
+
     /** Verifies that incomplete, invalid, and non-numeric commands are rejected. */
     @Test
     void rejectsMissingTaskDetailsAndInvalidDates() {

@@ -59,4 +59,20 @@ class TaskListTest {
         assertSame(book, matches.get(0));
         assertTrue(tasks.findTasks("missing").isEmpty());
     }
+
+    /** Verifies that dated tasks are ordered chronologically and todos remain at the end. */
+    @Test
+    void sortsTasksByDateTime_todosHaveNoDate_sortedAfterDatedTasks() {
+        TaskList tasks = new TaskList();
+        tasks.addTask("buy groceries");
+        tasks.addTask(new Deadline("submit report", LocalDateTime.of(2019, 12, 2, 18, 0)));
+        tasks.addTask(new Event("project meeting", LocalDateTime.of(2019, 10, 15, 14, 0),
+                LocalDateTime.of(2019, 10, 15, 16, 0)));
+
+        tasks.sortByDateTime();
+
+        assertEquals("project meeting", tasks.getTask(1).getDescription());
+        assertEquals("submit report", tasks.getTask(2).getDescription());
+        assertEquals("buy groceries", tasks.getTask(3).getDescription());
+    }
 }

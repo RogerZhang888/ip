@@ -22,7 +22,7 @@
             </VBox>
             <Label fx:id="taskCountLabel" styleClass="count-label" />
         </HBox>
-        <Label text="Plant: todo, deadline, event  •  Tend: list, find, mark, delete"
+        <Label text="Plant: todo, deadline, event  •  Tend: list, find, mark, delete, sort"
                styleClass="hint-label" wrapText="true" />
         <ListView fx:id="taskListView" VBox.vgrow="ALWAYS">
             <placeholder>

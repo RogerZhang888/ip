@@ -41,4 +41,9 @@ public class Event extends Task {
         return String.format(" (from: %s to: %s)", DateTimeParser.format(this.from),
                 DateTimeParser.format(this.to));
     }
+
+    @Override
+    protected LocalDateTime getSortDateTime() {
+        return this.from;
+    }
 }

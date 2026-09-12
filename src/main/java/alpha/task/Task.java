@@ -1,5 +1,7 @@
 package alpha.task;
 
+import java.time.LocalDateTime;
+
 /** Represents one task in Alpha's task list. */
 public class Task {
     private static int counter = 0;
@@ -41,6 +43,11 @@ public class Task {
     /** Returns the date/time details displayed after the task description. */
     protected String getTimeDetails() {
         return "";
+    }
+
+    /** Returns the date used for chronological sorting, or {@code null} for an undated task. */
+    protected LocalDateTime getSortDateTime() {
+        return null;
     }
 
     /** Marks this task as complete. */

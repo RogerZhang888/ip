@@ -32,4 +32,9 @@ public class Deadline extends Task {
     protected String getTimeDetails() {
         return String.format(" (by: %s)", DateTimeParser.format(this.by));
     }
+
+    @Override
+    protected LocalDateTime getSortDateTime() {
+        return this.by;
+    }
 }

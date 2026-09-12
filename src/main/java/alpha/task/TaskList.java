@@ -2,6 +2,7 @@ package alpha.task;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,6 +98,12 @@ public class TaskList {
         if (task != null) {
             task.markUndone();
         }
+    }
+
+    /** Sorts dated tasks chronologically, leaving undated tasks at the end. */
+    public void sortByDateTime() {
+        this.tasks.sort(Comparator.comparing(Task::getSortDateTime,
+                Comparator.nullsLast(Comparator.naturalOrder())));
     }
 
     /** Returns whether a one-based task number identifies an existing task. */

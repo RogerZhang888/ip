@@ -1,6 +1,6 @@
 # Moss — Quiet Task Garden
 
-Moss is a calm, garden-themed JavaFX task manager written in Java. Moss helps you plant todos, deadlines, and events, tend tasks as they are completed, and prune tasks you no longer need. Tasks are saved automatically and restored the next time the application starts.
+Moss is a calm, garden-themed JavaFX task manager written in Java. Moss helps you plant todos, deadlines, and events, tend tasks as they are completed, prune tasks you no longer need, and arrange dated tasks chronologically. Tasks are saved automatically and restored the next time the application starts.
 
 ## Requirements
 
@@ -142,10 +142,11 @@ event project meeting /from 2019-08-06 1400 /to 2019-08-06 1600
 
 Dates can be entered as `yyyy-MM-dd`, such as `2019-10-15`. Date/time values can use `yyyy-MM-dd HHmm`, such as `2019-10-15 1800`, or the day-first format `d/M/yyyy HHmm`, such as `2/12/2019 1800`. Moss displays parsed values in a readable format such as `Dec 02 2019 18:00`.
 
-### View and update tasks
+### View, sort, and update tasks
 
 ```text
 list
+sort
 find <keyword>
 mark <task number>
 unmark <task number>
@@ -165,6 +166,8 @@ list
 mark 2
 delete 1
 ```
+
+The `sort` command orders deadlines by due date and events by start time. Undated todos remain at the end. Moss saves the new order automatically.
 
 ### Exit
 

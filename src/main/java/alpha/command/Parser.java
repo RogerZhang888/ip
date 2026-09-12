@@ -24,6 +24,7 @@ public class Parser {
         FIND,
         LIST,
         MARK,
+        SORT,
         UNMARK
     }
 
@@ -83,6 +84,9 @@ public class Parser {
         if (command.equals("list")) {
             return new Command(CommandType.LIST, null, 0);
         }
+        if (command.equals("sort")) {
+            return new Command(CommandType.SORT, null, 0);
+        }
         if (command.equals("find") || command.startsWith("find ")) {
             return new Command(CommandType.FIND, parseKeyword(command));
         }
@@ -109,7 +113,7 @@ public class Parser {
             default:
                 throw new AlphaException(
                         "I don't recognise that command yet. Try todo, deadline, event, list, "
-                                + "find, mark, unmark, delete, or bye.");
+                                + "find, mark, unmark, delete, sort, or bye.");
         }
     }
 

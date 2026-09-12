@@ -89,6 +89,8 @@ public class TaskManager {
                 return this.updateTaskStatus(command.getTaskNumber(), true);
             case UNMARK:
                 return this.updateTaskStatus(command.getTaskNumber(), false);
+            case SORT:
+                return this.sortTasks();
             case DELETE:
                 return this.deleteTask(command.getTaskNumber());
             case BYE:
@@ -143,6 +145,13 @@ public class TaskManager {
         this.tasks.deleteTask(number);
         String message = String.format("Pruned this task:%n  %s%nYour garden now has %d tasks.",
                 task, this.tasks.size());
+        return new CommandResult(this.withSavingWarning(message), false);
+    }
+
+    /** Sorts dated tasks chronologically and saves the new garden order. */
+    private CommandResult sortTasks() {
+        this.tasks.sortByDateTime();
+        String message = "Moss arranged your garden by date and time.";
         return new CommandResult(this.withSavingWarning(message), false);
     }
 
