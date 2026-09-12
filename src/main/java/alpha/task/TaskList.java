@@ -7,6 +7,7 @@ import java.util.Locale;
 
 /** Stores and updates the tasks entered by the user. */
 public class TaskList {
+    private static final int FIRST_TASK_NUMBER = 1;
     private final ArrayList<Task> tasks = new ArrayList<>();
 
     /** Creates an empty task list. */
@@ -32,10 +33,11 @@ public class TaskList {
     }
 
     /** Returns a numbered display of all tasks in this list. */
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.tasks.size(); i++) {
-            builder.append(String.format("%d: %s%n", i + 1, this.tasks.get(i)));
+            builder.append(String.format("%d: %s%n", i + TaskList.FIRST_TASK_NUMBER, this.tasks.get(i)));
         }
 
         return builder.toString();
@@ -43,18 +45,18 @@ public class TaskList {
 
     /** Returns the task at a one-based list number, or {@code null} if it is invalid. */
     public Task getTask(int number) {
-        if (number < 1 || number > this.tasks.size()) {
+        if (!this.isValidTaskNumber(number)) {
             return null;
         }
-        return this.tasks.get(number - 1);
+        return this.tasks.get(number - TaskList.FIRST_TASK_NUMBER);
     }
 
     /** Removes and returns the task at a one-based list number, or {@code null} if invalid. */
     public Task deleteTask(int number) {
-        if (number < 1 || number > this.tasks.size()) {
+        if (!this.isValidTaskNumber(number)) {
             return null;
         }
-        Task removedTask = this.tasks.remove(number - 1);
+        Task removedTask = this.tasks.remove(number - TaskList.FIRST_TASK_NUMBER);
         return removedTask;
     }
 
@@ -95,5 +97,10 @@ public class TaskList {
         if (task != null) {
             task.markUndone();
         }
+    }
+
+    /** Returns whether a one-based task number identifies an existing task. */
+    private boolean isValidTaskNumber(int number) {
+        return number >= TaskList.FIRST_TASK_NUMBER && number <= this.tasks.size();
     }
 }
