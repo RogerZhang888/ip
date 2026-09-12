@@ -11,6 +11,11 @@ import java.time.format.DateTimeParseException;
 
 /** Parses user input into commands that Alpha can execute. */
 public class Parser {
+    private static final String BY_MARKER = "/by";
+    private static final String FROM_MARKER = "/from";
+    private static final String TO_MARKER = "/to";
+    private static final int COMMAND_SPLIT_LIMIT = 2;
+
     /** The operations understood by Alpha. */
     public enum CommandType {
         ADD,
@@ -91,7 +96,7 @@ public class Parser {
             return new Command(CommandType.DELETE, null, parseTaskNumber(command));
         }
 
-        String[] commandParts = command.split("\\s+", 2);
+        String[] commandParts = command.split("\\s+", Parser.COMMAND_SPLIT_LIMIT);
         String commandWord = commandParts[0];
         String details = commandParts.length == 2 ? commandParts[1].trim() : "";
         switch (commandWord) {
@@ -118,13 +123,13 @@ public class Parser {
 
     /** Parses a deadline using the form: deadline description /by date or time. */
     private Task parseDeadline(String details) throws AlphaException {
-        int markerIndex = details.indexOf("/by");
+        int markerIndex = details.indexOf(Parser.BY_MARKER);
         if (markerIndex < 0) {
             throw new AlphaException("A deadline needs a description followed by /by and a date or time.");
         }
 
         String description = details.substring(0, markerIndex).trim();
-        String by = details.substring(markerIndex + 3).trim();
+        String by = details.substring(markerIndex + Parser.BY_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new AlphaException("A deadline needs a description.");
         }
@@ -136,8 +141,9 @@ public class Parser {
 
     /** Parses an event using the form: event description /from start /to end. */
     private Task parseEvent(String details) throws AlphaException {
-        int fromIndex = details.indexOf("/from");
-        int toIndex = details.indexOf("/to", fromIndex + 5);
+        int fromIndex = details.indexOf(Parser.FROM_MARKER);
+        int toIndex = details.indexOf(Parser.TO_MARKER,
+                fromIndex + Parser.FROM_MARKER.length());
         if (fromIndex < 0) {
             throw new AlphaException("An event needs a description followed by /from and /to times.");
         }
@@ -146,8 +152,8 @@ public class Parser {
         }
 
         String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + 5, toIndex).trim();
-        String to = details.substring(toIndex + 3).trim();
+        String from = details.substring(fromIndex + Parser.FROM_MARKER.length(), toIndex).trim();
+        String to = details.substring(toIndex + Parser.TO_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new AlphaException("An event needs a description.");
         }
@@ -185,7 +191,7 @@ public class Parser {
 
     /** Parses the non-empty keyword from a find command. */
     private String parseKeyword(String command) throws AlphaException {
-        String[] parts = command.split("\\s+", 2);
+        String[] parts = command.split("\\s+", Parser.COMMAND_SPLIT_LIMIT);
         if (parts.length != 2 || parts[1].trim().isEmpty()) {
             throw new AlphaException("Please provide a keyword to search for, for example: find book.");
         }

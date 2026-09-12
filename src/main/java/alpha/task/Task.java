@@ -26,6 +26,7 @@ public class Task {
     }
 
     /** Returns the task's display text, including its type, status, and details. */
+    @Override
     public String toString() {
         String status = this.done ? "X" : " ";
         return String.format("[%s][%s] %s%s", this.getTypeIcon(), status,
