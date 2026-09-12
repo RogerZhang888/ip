@@ -31,6 +31,7 @@ public class MainWindow {
 
     /** Connects this controller to the shared task manager and displays its initial state. */
     public void setTaskManager(TaskManager taskManager) {
+        assert taskManager != null : "The main window must have a task manager";
         this.taskManager = taskManager;
         this.refreshTasks();
         if (taskManager.getLoadingWarning() != null) {
@@ -62,6 +63,8 @@ public class MainWindow {
 
     /** Marks or unmarks the selected task. */
     private void toggleTask(int taskNumber) {
+        assert taskNumber > 0 && taskNumber <= this.taskManager.getTasks().size()
+                : "A task control must reference a displayed task";
         Task task = this.taskManager.getTasks().get(taskNumber - 1);
         this.runCommand(task.isDone() ? "unmark " : "mark ", taskNumber);
     }

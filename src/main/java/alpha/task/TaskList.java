@@ -15,6 +15,7 @@ public class TaskList {
 
     /** Creates a task list containing a copy of the supplied tasks. */
     public TaskList(List<Task> tasks) {
+        assert tasks != null : "A task list must be initialized from a non-null collection";
         this.tasks.addAll(tasks);
     }
 
@@ -25,6 +26,7 @@ public class TaskList {
 
     /** Adds any task subtype and returns the added task. */
     public Task addTask(Task task) {
+        assert task != null : "Only non-null tasks can be added";
         this.tasks.add(task);
         return task;
     }
@@ -68,6 +70,7 @@ public class TaskList {
 
     /** Returns tasks whose descriptions contain the keyword, ignoring letter case. */
     public List<Task> findTasks(String keyword) {
+        assert keyword != null : "A search keyword must not be null";
         String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
         ArrayList<Task> matchingTasks = new ArrayList<>();
         for (Task task : this.tasks) {
