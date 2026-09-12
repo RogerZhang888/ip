@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -30,19 +31,28 @@ public class TaskCell extends ListCell<Task> {
             return;
         }
 
+        int taskNumber = this.getIndex() + 1;
+        Label numberLabel = new Label(String.format("%02d", taskNumber));
+        numberLabel.getStyleClass().add("task-number");
+
         Label taskLabel = new Label(task.toString());
         taskLabel.setWrapText(true);
         taskLabel.setMaxWidth(Double.MAX_VALUE);
         taskLabel.getStyleClass().add(task.isDone() ? "completed-task" : "task-description");
         HBox.setHgrow(taskLabel, Priority.ALWAYS);
 
-        int taskNumber = this.getIndex() + 1;
         Button toggleButton = new Button(task.isDone() ? "Unmark" : "Mark");
+        toggleButton.getStyleClass().add("secondary-button");
+        toggleButton.setTooltip(new Tooltip(task.isDone() ? "Mark task as incomplete" : "Mark task as complete"));
         toggleButton.setOnAction(event -> this.toggleHandler.accept(taskNumber));
         Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("delete-button");
+        deleteButton.setTooltip(new Tooltip("Delete task"));
         deleteButton.setOnAction(event -> this.deleteHandler.accept(taskNumber));
 
-        HBox row = new HBox(10, taskLabel, toggleButton, deleteButton);
+        HBox row = new HBox(10, numberLabel, taskLabel, toggleButton, deleteButton);
+        row.getStyleClass().add("task-card");
+        row.setMaxWidth(Double.MAX_VALUE);
         row.setAlignment(Pos.CENTER_LEFT);
         this.setText(null);
         this.setGraphic(row);

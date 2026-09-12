@@ -34,7 +34,7 @@ public class MainWindow {
         this.taskManager = taskManager;
         this.refreshTasks();
         if (taskManager.getLoadingWarning() != null) {
-            this.feedbackLabel.setText(taskManager.getLoadingWarning());
+            this.showFeedback(taskManager.getLoadingWarning(), "warning");
         }
     }
 
@@ -43,20 +43,20 @@ public class MainWindow {
     private void handleCommand() {
         String input = this.commandInput.getText().trim();
         if (input.isEmpty()) {
-            this.feedbackLabel.setText("Please enter a command.");
+            this.showFeedback("Please enter a command.", "error");
             return;
         }
 
         try {
             TaskManager.CommandResult result = this.taskManager.execute(input);
-            this.feedbackLabel.setText(result.getMessage());
+            this.showFeedback(result.getMessage(), "success");
             this.refreshTasks();
             this.commandInput.clear();
             if (result.isExit()) {
                 Platform.exit();
             }
         } catch (AlphaException exception) {
-            this.feedbackLabel.setText("Oops! " + exception.getMessage());
+            this.showFeedback("Oops! " + exception.getMessage(), "error");
         }
     }
 
@@ -82,5 +82,12 @@ public class MainWindow {
         List<Task> tasks = this.taskManager.getTasks();
         this.taskListView.getItems().setAll(tasks);
         this.taskCountLabel.setText(tasks.size() + (tasks.size() == 1 ? " task" : " tasks"));
+    }
+
+    /** Updates the feedback message and applies a visual state that matches its meaning. */
+    private void showFeedback(String message, String state) {
+        this.feedbackLabel.getStyleClass().removeAll("success", "warning", "error");
+        this.feedbackLabel.getStyleClass().add(state);
+        this.feedbackLabel.setText(message);
     }
 }

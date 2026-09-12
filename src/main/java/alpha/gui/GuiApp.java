@@ -21,8 +21,9 @@ public class GuiApp extends Application {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(GuiApp.class.getResource("/css/main.css").toExternalForm());
         stage.setTitle("Alpha Task Manager");
-        stage.setMinWidth(560);
+        stage.setMinWidth(520);
         stage.setMinHeight(420);
+        stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
     }
