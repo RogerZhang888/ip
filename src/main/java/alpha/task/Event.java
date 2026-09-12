@@ -15,6 +15,8 @@ public class Event extends Task {
     /** Creates an event with already parsed start and end dates and times. */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
+        assert from != null : "An event must have a parsed start time";
+        assert to != null : "An event must have a parsed end time";
         this.from = from;
         this.to = to;
     }

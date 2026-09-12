@@ -27,6 +27,7 @@ public class Storage {
 
     /** Creates storage using the supplied path. */
     public Storage(Path filePath) {
+        assert filePath != null : "Storage must have a file path";
         this.filePath = filePath;
     }
 
@@ -52,6 +53,7 @@ public class Storage {
 
     /** Saves the task list, creating its parent directory when necessary. */
     public void save(TaskList taskList) throws StorageException {
+        assert taskList != null : "Storage can only save a non-null task list";
         try {
             Path parent = this.filePath.getParent();
             if (parent != null) {
@@ -66,8 +68,10 @@ public class Storage {
 
     /** Converts each task into one encoded record for the storage file. */
     private List<String> serializeTasks(TaskList taskList) {
+        assert taskList != null : "Task serialization requires a task list";
         ArrayList<String> lines = new ArrayList<>();
         for (Task task : taskList.getTasks()) {
+            assert task != null : "A task list must not contain null tasks";
             String type;
             String extraFields = "";
             if (task instanceof Deadline deadline) {

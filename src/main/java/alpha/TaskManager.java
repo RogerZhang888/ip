@@ -23,6 +23,7 @@ public class TaskManager {
 
     /** Creates a task manager using the supplied task-data path. */
     public TaskManager(Path filePath) {
+        assert filePath != null : "A task manager must have a data-file path";
         this.storage = new Storage(filePath);
         this.parser = new Parser();
 
@@ -46,6 +47,7 @@ public class TaskManager {
 
         /** Creates a command result. */
         public CommandResult(String message, boolean exit) {
+            assert message != null : "A command result must contain a message";
             this.message = message;
             this.exit = exit;
         }
@@ -73,7 +75,9 @@ public class TaskManager {
 
     /** Executes one command and returns the response that should be shown to the user. */
     public CommandResult execute(String input) throws AlphaException {
+        assert input != null : "The command manager expects a non-null input line";
         Parser.Command command = this.parser.parse(input);
+        assert command != null : "The parser must return a command for valid input";
         switch (command.getType()) {
             case ADD:
                 return this.addTask(command.getTask());
@@ -96,6 +100,7 @@ public class TaskManager {
 
     /** Adds a task, saves it, and creates the corresponding response. */
     private CommandResult addTask(Task task) {
+        assert task != null : "An add command must produce a task";
         Task addedTask = this.tasks.addTask(task);
         String message = String.format("Planted your task:%n  %s%nYour garden now has %d tasks.",
                 addedTask, this.tasks.size());

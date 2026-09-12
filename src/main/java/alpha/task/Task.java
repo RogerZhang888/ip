@@ -9,6 +9,7 @@ public class Task {
 
     /** Creates an unfinished task with the supplied description. */
     public Task(String description) {
+        assert description != null : "A task must have a non-null description";
         this.id = Task.counter;
         Task.counter++;
         this.description = description;

@@ -14,6 +14,7 @@ public class Deadline extends Task {
     /** Creates a deadline with an already parsed date and time. */
     public Deadline(String description, LocalDateTime by) {
         super(description);
+        assert by != null : "A deadline must have a parsed due date";
         this.by = by;
     }
 
