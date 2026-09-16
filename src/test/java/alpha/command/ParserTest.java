@@ -63,4 +63,12 @@ class ParserTest {
                 () -> this.parser.parse("mark not-a-number"));
         assertThrows(AlphaException.class, () -> this.parser.parse("find"));
     }
+
+    /** Verifies that a missing command is reported as a user error instead of a null-pointer failure. */
+    @Test
+    void rejectsNullInputWithUserFriendlyError() {
+        AlphaException exception = assertThrows(AlphaException.class, () -> this.parser.parse(null));
+
+        assertEquals("Please enter a command.", exception.getMessage());
+    }
 }

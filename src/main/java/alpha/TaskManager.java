@@ -75,7 +75,6 @@ public class TaskManager {
 
     /** Executes one command and returns the response that should be shown to the user. */
     public CommandResult execute(String input) throws AlphaException {
-        assert input != null : "The command manager expects a non-null input line";
         Parser.Command command = this.parser.parse(input);
         assert command != null : "The parser must return a command for valid input";
         switch (command.getType()) {

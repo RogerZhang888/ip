@@ -73,6 +73,9 @@ public class Parser {
 
     /** Parses one complete user input line. */
     public Command parse(String input) throws AlphaException {
+        if (input == null) {
+            throw new AlphaException("Please enter a command.");
+        }
         String command = input.trim();
         if (command.isEmpty()) {
             throw new AlphaException("Please enter a command.");

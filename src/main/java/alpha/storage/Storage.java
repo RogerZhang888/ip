@@ -33,7 +33,7 @@ public class Storage {
 
     /** Loads all valid task records, returning an empty list when the file does not exist. */
     public List<Task> load() throws StorageException {
-        if (!Files.exists(this.filePath)) {
+        if (Files.notExists(this.filePath)) {
             return new ArrayList<>();
         }
 
@@ -46,7 +46,7 @@ public class Storage {
                 }
             }
             return tasks;
-        } catch (IOException exception) {
+        } catch (IOException | SecurityException exception) {
             throw new StorageException("Could not load tasks from " + this.filePath + ".", exception);
         }
     }
@@ -61,7 +61,7 @@ public class Storage {
             }
             Files.write(this.filePath, this.serializeTasks(taskList), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException exception) {
+        } catch (IOException | SecurityException exception) {
             throw new StorageException("Could not save tasks to " + this.filePath + ".", exception);
         }
     }
