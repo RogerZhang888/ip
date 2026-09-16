@@ -2,7 +2,7 @@
 
 Moss is a quiet task garden for keeping track of todos, deadlines, and events. You can plant tasks, mark them as complete, search or sort them, and prune them when they are no longer needed.
 
-![Moss task garden](UI.png)
+![Moss task garden](Ui.png)
 
 ## Getting started
 
