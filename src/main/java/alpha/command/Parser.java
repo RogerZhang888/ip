@@ -9,14 +9,14 @@ import alpha.task.Todo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
-/** Parses user input into commands that Alpha can execute. */
+/** Parses user input into commands that Moss can execute. */
 public class Parser {
     private static final String BY_MARKER = "/by";
     private static final String FROM_MARKER = "/from";
     private static final String TO_MARKER = "/to";
     private static final int COMMAND_SPLIT_LIMIT = 2;
 
-    /** The operations understood by Alpha. */
+    /** The operations understood by Moss. */
     public enum CommandType {
         ADD,
         BYE,

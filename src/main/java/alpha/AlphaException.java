@@ -1,6 +1,6 @@
 package alpha;
 
-/** Represents an error caused by an invalid Alpha command. */
+/** Represents an error caused by an invalid Moss command. */
 public class AlphaException extends Exception {
     private static final long serialVersionUID = 1L;
 

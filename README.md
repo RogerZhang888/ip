@@ -48,17 +48,17 @@ To create a distributable executable JAR, run:
 ./gradlew shadowJar
 ```
 
-The JAR is written to `build/libs/duke.jar`. The regular `build` task also
+The JAR is written to `build/libs/moss.jar`. The regular `build` task also
 creates this JAR automatically:
 
 ```bash
 ./gradlew build
 ```
 
-Copy `build/libs/duke.jar` into an empty folder and run it from that folder:
+Copy `build/libs/moss.jar` into an empty folder and run it from that folder:
 
 ```bash
-java -jar "duke.jar"
+java -jar "moss.jar"
 ```
 
 The JAR includes the application's runtime classes and its entry point, so no
@@ -83,8 +83,6 @@ cp -R src/main/resources/. out/
 java --module-path "$JAVA_HOME_PATH/jmods" --add-modules javafx.controls,javafx.fxml \
   -cp out alpha.gui.GuiLauncher
 ```
-
-The command-line version remains available through `alpha.Alpha`. It uses the same Moss personality and commands. Gradle manages compilation, JavaFX dependencies, and tests.
 
 ## Moss's GUI
 
@@ -180,7 +178,7 @@ bye
 Moss saves the task list automatically after every add, delete, mark, and unmark operation. The data is stored in the relative path:
 
 ```text
-data/duke.txt
+data/moss.txt
 ```
 
 The `data` folder and file are created automatically the first time a task is saved. Do not delete this file if you want to keep your tasks.

@@ -10,7 +10,7 @@ import alpha.task.Event;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
-/** Tests conversion of user input into typed Alpha commands. */
+/** Tests conversion of user input into typed Moss commands. */
 class ParserTest {
     private final Parser parser = new Parser();
 

@@ -125,7 +125,7 @@ bye
 
 ## Saving your tasks
 
-Moss saves changes automatically after adding, marking, unmarking, deleting, or sorting a task. Saved tasks are stored in `data/duke.txt` relative to the folder from which Moss is started, and are restored the next time it runs.
+Moss saves changes automatically after adding, marking, unmarking, deleting, or sorting a task. Saved tasks are stored in `data/moss.txt` relative to the folder from which Moss is started, and are restored the next time it runs.
 
 On the first run, Moss starts with an empty garden if the data file does not exist. The `data` folder and file are created automatically after the first task change.
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 /** Coordinates command execution, task updates, and task persistence. */
 public class TaskManager {
-    private static final Path DATA_FILE = Path.of("data", "duke.txt");
+    private static final Path DATA_FILE = Path.of("data", "moss.txt");
     private final Storage storage;
     private final Parser parser;
     private final TaskList tasks;

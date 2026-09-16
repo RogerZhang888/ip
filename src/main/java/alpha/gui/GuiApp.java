@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/** Starts the JavaFX window for Alpha. */
+/** Starts the JavaFX window for Moss. */
 public class GuiApp extends Application {
     /** Loads the main view and connects it to a task manager. */
     @Override

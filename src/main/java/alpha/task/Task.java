@@ -2,7 +2,7 @@ package alpha.task;
 
 import java.time.LocalDateTime;
 
-/** Represents one task in Alpha's task list. */
+/** Represents one task in Moss's task list. */
 public class Task {
     private static int counter = 0;
     private final int id;

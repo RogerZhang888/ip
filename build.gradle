@@ -62,7 +62,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    archiveFileName = 'moss.jar'
     manifest {
         attributes 'Main-Class': application.mainClass.get()
     }
@@ -70,8 +70,4 @@ shadowJar {
 
 tasks.named('build') {
     dependsOn tasks.named('shadowJar')
-}
-
-run {
-    standardInput = System.in
 }
